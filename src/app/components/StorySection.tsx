@@ -15,7 +15,7 @@ export function StorySection() {
   const opacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0, 1, 1, 0]);
 
   return (
-    <section ref={containerRef} className="relative py-24 bg-gradient-to-b from-white via-amber-50/30 to-white overflow-hidden">
+    <section ref={containerRef} className="relative py-32 bg-gradient-to-b from-white via-slate-50 to-white overflow-hidden">
       <motion.div style={{ opacity }} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section header */}
         <motion.div

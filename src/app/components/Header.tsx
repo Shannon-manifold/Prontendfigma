@@ -1,7 +1,14 @@
 import { Search, Bell, User, Menu } from 'lucide-react';
 import { motion } from 'motion/react';
+import { Link, useLocation } from 'react-router';
 
 export function Header() {
+  const location = useLocation();
+
+  const isActive = (path: string) => {
+    return location.pathname === path;
+  };
+
   return (
     <motion.header
       initial={{ y: -100 }}
@@ -12,18 +19,29 @@ export function Header() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center gap-8">
-            <div className="flex items-center gap-2">
+            <Link to="/" className="flex items-center gap-2">
               <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-lg">∀</span>
               </div>
               <h1 className="text-xl font-bold text-gray-900">ProofHub</h1>
-            </div>
+            </Link>
 
             <nav className="hidden md:flex items-center gap-6">
-              <a href="#" className="text-gray-700 hover:text-indigo-600 transition">정리</a>
+              <Link
+                to="/"
+                className={`transition ${isActive('/') ? 'text-indigo-600 font-medium' : 'text-gray-700 hover:text-indigo-600'}`}
+              >
+                정리
+              </Link>
               <a href="#" className="text-gray-700 hover:text-indigo-600 transition">토론</a>
               <a href="#" className="text-gray-700 hover:text-indigo-600 transition">기여자</a>
               <a href="#" className="text-gray-700 hover:text-indigo-600 transition">문서</a>
+              <Link
+                to="/blog"
+                className={`transition ${isActive('/blog') ? 'text-indigo-600 font-medium' : 'text-gray-700 hover:text-indigo-600'}`}
+              >
+                블로그
+              </Link>
             </nav>
           </div>
 
