@@ -1,5 +1,6 @@
 import { motion } from 'motion/react';
 import { ArrowRight } from 'lucide-react';
+import { Link } from 'react-router';
 import { ImageWithFallback } from './ImageWithFallback';
 
 export function HeroSection() {
@@ -92,13 +93,15 @@ export function HeroSection() {
                 <ArrowRight className="w-5 h-5" />
               </motion.button>
 
-              <motion.button
-                whileHover={{ scale: 1.05, y: -2 }}
-                whileTap={{ scale: 0.98 }}
-                className="px-8 py-4 bg-white text-gray-700 rounded-xl font-medium shadow-lg hover:shadow-xl transition-shadow border border-gray-200"
-              >
-                튜토리얼 보기
-              </motion.button>
+              <Link to="/tutorials">
+                <motion.button
+                  whileHover={{ scale: 1.05, y: -2 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="px-8 py-4 bg-white text-gray-700 rounded-xl font-medium shadow-lg hover:shadow-xl transition-shadow border border-gray-200"
+                >
+                  튜토리얼 보기
+                </motion.button>
+              </Link>
             </motion.div>
           </motion.div>
 
