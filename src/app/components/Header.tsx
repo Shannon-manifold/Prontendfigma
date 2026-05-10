@@ -28,12 +28,17 @@ export function Header() {
 
             <nav className="hidden md:flex items-center gap-6">
               <Link
-                to="/"
-                className={`transition ${isActive('/') ? 'text-indigo-600 font-medium' : 'text-gray-700 hover:text-indigo-600'}`}
+                to="/proofs"
+                className={`transition ${isActive('/proofs') ? 'text-indigo-600 font-medium' : 'text-gray-700 hover:text-indigo-600'}`}
               >
                 정리
               </Link>
-              <a href="#" className="text-gray-700 hover:text-indigo-600 transition">토론</a>
+              <Link
+                to="/qna"
+                className={`transition ${isActive('/qna') ? 'text-indigo-600 font-medium' : 'text-gray-700 hover:text-indigo-600'}`}
+              >
+                Q&A
+              </Link>
               <a href="#" className="text-gray-700 hover:text-indigo-600 transition">기여자</a>
               <a href="#" className="text-gray-700 hover:text-indigo-600 transition">문서</a>
               <Link

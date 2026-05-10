@@ -84,14 +84,16 @@ export function HeroSection() {
               transition={{ delay: 0.8, duration: 0.6 }}
               className="flex flex-wrap gap-4"
             >
-              <motion.button
-                whileHover={{ scale: 1.05, y: -2 }}
-                whileTap={{ scale: 0.98 }}
-                className="px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl font-medium shadow-lg shadow-indigo-200 hover:shadow-xl hover:shadow-indigo-300 transition-shadow flex items-center gap-2"
-              >
-                증명 탐색하기
-                <ArrowRight className="w-5 h-5" />
-              </motion.button>
+              <Link to="/proofs">
+                <motion.button
+                  whileHover={{ scale: 1.05, y: -2 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl font-medium shadow-lg shadow-indigo-200 hover:shadow-xl hover:shadow-indigo-300 transition-shadow flex items-center gap-2"
+                >
+                  증명 탐색하기
+                  <ArrowRight className="w-5 h-5" />
+                </motion.button>
+              </Link>
 
               <Link to="/tutorials">
                 <motion.button
