@@ -1,10 +1,5 @@
-import { HeroSection } from '../components/HeroSection';
 import { StorySection } from '../components/StorySection';
 import { TheoremCard } from '../components/TheoremCard';
-import { StatsCard } from '../components/StatsCard';
-import { FilterBar } from '../components/FilterBar';
-import { CheckCircle, FileText, Users, TrendingUp } from 'lucide-react';
-import { motion } from 'motion/react';
 
 export function HomePage() {
   const theorems = [
@@ -72,61 +67,37 @@ export function HomePage() {
 
   return (
     <>
-      <HeroSection />
+      <section className="bg-white border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <span className="inline-block px-3 py-1 bg-indigo-50 text-indigo-700 rounded-full text-sm font-medium mb-4">
+            ABOUT
+          </span>
+          <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
+            ShannonManifold
+          </h1>
+          <p className="text-lg text-gray-600 max-w-3xl leading-relaxed">
+            ShannonManifold는 증명 보조기로 검증한 수학 정리, 난제, 질문과 답변을
+            한곳에 모아 신뢰할 수 있는 수학 지식을 함께 쌓는 커뮤니티입니다.
+          </p>
+        </div>
+      </section>
+
       <StorySection />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        {/* Stats Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <StatsCard
-            icon={CheckCircle}
-            label="검증된 정리"
-            value="1,247"
-            change="+23"
-            color="text-green-600"
-          />
-          <StatsCard
-            icon={FileText}
-            label="전체 정리"
-            value="2,834"
-            change="+67"
-            color="text-blue-600"
-          />
-          <StatsCard
-            icon={Users}
-            label="기여자"
-            value="892"
-            change="+12"
-            color="text-purple-600"
-          />
-          <StatsCard
-            icon={TrendingUp}
-            label="검증률"
-            value="87.5%"
-            change="+2.3%"
-            color="text-orange-600"
-          />
+        <div className="mb-8">
+          <h2 className="text-3xl font-bold text-gray-900 mb-2">
+            최근 정리
+          </h2>
+          <p className="text-gray-600">
+            커뮤니티에서 검증하고 공유한 수학 정리입니다
+          </p>
         </div>
 
-        {/* Filter Bar */}
-        <FilterBar />
-
-        {/* Theorems Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {theorems.map((theorem, index) => (
             <TheoremCard key={index} {...theorem} />
           ))}
-        </div>
-
-        {/* Load More */}
-        <div className="text-center mt-8">
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="px-6 py-3 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition font-medium shadow-sm"
-          >
-            더 보기
-          </motion.button>
         </div>
       </main>
     </>

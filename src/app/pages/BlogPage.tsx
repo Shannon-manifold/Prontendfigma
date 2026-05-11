@@ -2,6 +2,9 @@ import { motion } from 'motion/react';
 import { Calendar, Clock, User, ArrowRight } from 'lucide-react';
 import { ImageWithFallback } from '../components/ImageWithFallback';
 
+const weierstrassPortraitUrl =
+  'https://commons.wikimedia.org/wiki/Special:FilePath/Karl_Weierstrass.jpg?width=900';
+
 export function BlogPage() {
   const blogPosts = [
     {
@@ -62,26 +65,59 @@ export function BlogPage() {
 
   return (
     <div className="min-h-screen">
-      {/* Hero Section */}
-      <section className="relative py-20 bg-gradient-to-r from-indigo-600 to-purple-600 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            <span className="inline-block px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-sm font-medium mb-4">
-              BLOG
-            </span>
-            <h1 className="text-4xl sm:text-5xl font-bold mb-4">
-              증명의 세계를 탐험하는
-              <br />
-              이야기와 인사이트
-            </h1>
-            <p className="text-xl text-indigo-100 max-w-2xl mx-auto">
-              형식 증명의 최신 트렌드, 튜토리얼, 그리고 커뮤니티 스토리를 만나보세요
-            </p>
-          </motion.div>
+      {/* Hero Section with Weierstrass Quote */}
+      <section className="bg-white border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+          <div className="grid lg:grid-cols-[0.9fr_1.1fr] gap-12 items-center">
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8 }}
+              className="flex justify-center lg:justify-start"
+            >
+              <div className="relative w-full max-w-sm aspect-[4/5] overflow-hidden rounded-2xl bg-gray-100 shadow-2xl">
+                <ImageWithFallback
+                  src={weierstrassPortraitUrl}
+                  alt="Karl Weierstrass portrait"
+                  className="w-full h-full object-cover object-center"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent" />
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+            >
+              <span className="inline-block px-4 py-2 bg-indigo-100 rounded-full text-sm text-indigo-700 font-medium mb-6">
+                BLOG
+              </span>
+
+              <blockquote className="border-l-4 border-indigo-500 pl-6 mb-8">
+                <p className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 leading-snug">
+                  시인의 기질을 갖추지 못한 자는
+                  <br />
+                  결코 진정한 수학자가 될 수 없다.
+                </p>
+                <p className="mt-5 text-base text-gray-500 leading-relaxed">
+                  ... es ist wahr, ein Mathematiker, der nicht etwas Poet ist, wird nimmer ein vollkommener Mathematiker sein.
+                </p>
+              </blockquote>
+
+              <div className="border-t border-gray-300 pt-6">
+                <div className="font-semibold text-xl text-gray-900 mb-1">
+                  카를 바이어슈트라스
+                </div>
+                <div className="text-gray-600 text-sm mb-2">
+                  Karl Weierstrass
+                </div>
+                <div className="text-indigo-600 font-medium text-sm">
+                  해석학의 아버지 · 1815-1897
+                </div>
+              </div>
+            </motion.div>
+          </div>
         </div>
       </section>
 

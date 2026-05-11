@@ -6,6 +6,8 @@ import { TutorialsPage } from "./pages/TutorialsPage";
 import { TutorialDetailPage } from "./pages/TutorialDetailPage";
 import { QnAPage } from "./pages/QnAPage";
 import { ProofsPage } from "./pages/ProofsPage";
+import { ContributorsPage } from "./pages/ContributorsPage";
+import { ChallengesPage } from "./pages/ChallengesPage";
 import { NotFound } from "./pages/NotFound";
 
 export const router = createBrowserRouter([
@@ -18,6 +20,8 @@ export const router = createBrowserRouter([
       { path: "tutorials", Component: TutorialsPage },
       { path: "qna", Component: QnAPage },
       { path: "proofs", Component: ProofsPage },
+      { path: "contributors", Component: ContributorsPage },
+      { path: "challenges", Component: ChallengesPage },
       { path: "*", Component: NotFound },
     ],
   },
