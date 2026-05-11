@@ -68,14 +68,11 @@ export function HomePage() {
   return (
     <>
       <section className="bg-white border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <span className="inline-block px-3 py-1 bg-indigo-50 text-indigo-700 rounded-full text-sm font-medium mb-4">
-            ABOUT
-          </span>
-          <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+          <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-3">
             ShannonManifold
           </h1>
-          <p className="text-lg text-gray-600 max-w-3xl leading-relaxed">
+          <p className="text-base text-gray-500 max-w-3xl leading-relaxed">
             ShannonManifold는 증명 보조기로 검증한 수학 정리, 난제, 질문과 답변을
             한곳에 모아 신뢰할 수 있는 수학 지식을 함께 쌓는 커뮤니티입니다.
           </p>
@@ -84,17 +81,13 @@ export function HomePage() {
 
       <StorySection />
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="mb-8">
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">
-            최근 정리
-          </h2>
-          <p className="text-gray-600">
-            커뮤니티에서 검증하고 공유한 수학 정리입니다
-          </p>
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="flex items-baseline justify-between mb-6">
+          <h2 className="text-xl font-semibold text-gray-900">최근 정리</h2>
+          <span className="text-sm text-gray-500">커뮤니티 검증 {theorems.length}건</span>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           {theorems.map((theorem, index) => (
             <TheoremCard key={index} {...theorem} />
           ))}

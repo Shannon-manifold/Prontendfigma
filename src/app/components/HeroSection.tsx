@@ -5,182 +5,129 @@ import { ImageWithFallback } from './ImageWithFallback';
 
 export function HeroSection() {
   return (
-    <section className="relative min-h-[90vh] flex items-center overflow-hidden">
-      {/* Background with gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-amber-50 via-rose-50 to-indigo-50"></div>
-
-      {/* Floating mathematical symbols */}
-      <div className="absolute inset-0 overflow-hidden opacity-10">
-        {['∀', '∃', '∫', '∑', '∞', '≡', '∈', '⊂'].map((symbol, i) => (
+    <section className="border-b border-gray-200 bg-white">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid lg:grid-cols-[1fr_420px] gap-16 py-20 items-center">
           <motion.div
-            key={i}
-            className="absolute text-6xl text-indigo-600 font-serif"
-            style={{
-              left: `${(i * 13 + 5) % 90}%`,
-              top: `${(i * 17 + 10) % 80}%`,
-            }}
-            animate={{
-              y: [0, -30, 0],
-              rotate: [0, 5, 0],
-              opacity: [0.1, 0.2, 0.1],
-            }}
-            transition={{
-              duration: 8 + i,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-          >
-            {symbol}
-          </motion.div>
-        ))}
-      </div>
-
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
-          {/* Left content */}
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
+            initial={{ opacity: 0, x: -24 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
+            transition={{ duration: 0.7, ease: 'easeOut' }}
           >
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
+            <motion.p
+              initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2, duration: 0.6 }}
-              className="inline-block mb-4"
+              transition={{ delay: 0.1, duration: 0.5 }}
+              className="text-sm text-gray-500 mb-5 tracking-wide"
             >
-              <span className="px-4 py-2 bg-white/80 backdrop-blur-sm rounded-full text-sm text-indigo-600 font-medium shadow-sm">
-                증명 보조기로 만드는 신뢰의 수학
-              </span>
-            </motion.div>
+              증명 보조기로 만드는 신뢰의 수학
+            </motion.p>
 
             <motion.h1
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4, duration: 0.6 }}
-              className="text-5xl sm:text-6xl lg:text-7xl font-bold mb-6 leading-tight"
+              transition={{ delay: 0.2, duration: 0.5 }}
+              className="text-5xl sm:text-6xl font-bold text-gray-900 leading-tight mb-6"
             >
-              <span className="bg-gradient-to-r from-indigo-600 via-purple-600 to-rose-600 bg-clip-text text-transparent">
-                증명의 아름다움,
-              </span>
+              증명의 공간,
               <br />
-              <span className="text-gray-900">함께 만들어가요</span>
+              <span className="text-indigo-600">ShannonManifold</span>
             </motion.h1>
 
             <motion.p
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6, duration: 0.6 }}
-              className="text-xl text-gray-600 mb-8 leading-relaxed"
+              transition={{ delay: 0.3, duration: 0.5 }}
+              className="text-lg text-gray-600 mb-10 leading-relaxed max-w-xl"
             >
               Lean, Coq, Isabelle로 검증된 수학 정리를 공유하고,
-              <br />
               전 세계 수학자들과 함께 지식의 경계를 넓혀나가세요.
             </motion.p>
 
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.8, duration: 0.6 }}
-              className="flex flex-wrap gap-4"
+              transition={{ delay: 0.4, duration: 0.5 }}
+              className="flex flex-wrap gap-3"
             >
               <Link to="/proofs">
-                <motion.button
-                  whileHover={{ scale: 1.05, y: -2 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl font-medium shadow-lg shadow-indigo-200 hover:shadow-xl hover:shadow-indigo-300 transition-shadow flex items-center gap-2"
+                <motion.div
+                  whileHover={{ scale: 1.03, y: -1 }}
+                  whileTap={{ scale: 0.97 }}
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-gray-900 text-white text-sm font-medium rounded hover:bg-gray-700 transition-colors cursor-pointer"
                 >
                   증명 탐색하기
-                  <ArrowRight className="w-5 h-5" />
-                </motion.button>
+                  <ArrowRight className="w-4 h-4" />
+                </motion.div>
               </Link>
-
               <Link to="/tutorials">
-                <motion.button
-                  whileHover={{ scale: 1.05, y: -2 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="px-8 py-4 bg-white text-gray-700 rounded-xl font-medium shadow-lg hover:shadow-xl transition-shadow border border-gray-200"
+                <motion.div
+                  whileHover={{ scale: 1.03, y: -1 }}
+                  whileTap={{ scale: 0.97 }}
+                  className="inline-flex items-center gap-2 px-6 py-3 border border-gray-300 text-gray-700 text-sm font-medium rounded hover:bg-gray-50 transition-colors cursor-pointer"
                 >
                   튜토리얼 보기
-                </motion.button>
+                </motion.div>
               </Link>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.6, duration: 0.6 }}
+              className="flex items-center gap-8 mt-12 pt-8 border-t border-gray-100"
+            >
+              <div>
+                <div className="text-2xl font-bold text-gray-900">1,247</div>
+                <div className="text-sm text-gray-500">검증된 정리</div>
+              </div>
+              <div className="w-px h-8 bg-gray-200" />
+              <div>
+                <div className="text-2xl font-bold text-gray-900">87.5%</div>
+                <div className="text-sm text-gray-500">검증률</div>
+              </div>
+              <div className="w-px h-8 bg-gray-200" />
+              <div>
+                <div className="text-2xl font-bold text-gray-900">4,395</div>
+                <div className="text-sm text-gray-500">커뮤니티 멤버</div>
+              </div>
             </motion.div>
           </motion.div>
 
-          {/* Right content - Image grid */}
           <motion.div
-            initial={{ opacity: 0, x: 50 }}
+            initial={{ opacity: 0, x: 24 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut", delay: 0.3 }}
-            className="relative"
+            transition={{ duration: 0.7, ease: 'easeOut', delay: 0.2 }}
+            className="hidden lg:block"
           >
-            <div className="grid grid-cols-2 gap-4">
+            <div className="relative">
               <motion.div
-                whileHover={{ scale: 1.05, rotate: 2 }}
-                className="relative h-64 rounded-2xl overflow-hidden shadow-xl"
+                whileHover={{ scale: 1.02 }}
+                transition={{ duration: 0.3 }}
+                className="aspect-[4/5] rounded-lg overflow-hidden bg-gray-100"
               >
                 <ImageWithFallback
                   src="https://images.unsplash.com/photo-1754304342490-2fa390075d02?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwyfHxtYXRoZW1hdGljcyUyMGFic3RyYWN0JTIwZWxlZ2FudHxlbnwxfHx8fDE3Nzc1MTczMDR8MA&ixlib=rb-4.1.0&q=80&w=1080"
                   alt="Mathematical formulas"
                   className="w-full h-full object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
               </motion.div>
-
               <motion.div
-                whileHover={{ scale: 1.05, rotate: -2 }}
-                className="relative h-64 rounded-2xl overflow-hidden shadow-xl mt-8"
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.8, duration: 0.4 }}
+                className="absolute -bottom-4 -left-4 bg-white border border-gray-200 rounded-lg p-4 shadow-sm"
               >
-                <ImageWithFallback
-                  src="https://images.unsplash.com/photo-1758872014929-174e4ccdf01f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzdHVkeWluZyUyMHdhcm0lMjBsaWdodCUyMGNvZmZlZXxlbnwxfHx8fDE3Nzc1MTczMDR8MA&ixlib=rb-4.1.0&q=80&w=1080"
-                  alt="Studying with coffee"
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
-              </motion.div>
-
-              <motion.div
-                whileHover={{ scale: 1.05, rotate: -2 }}
-                className="relative h-64 rounded-2xl overflow-hidden shadow-xl -mt-4"
-              >
-                <ImageWithFallback
-                  src="https://images.unsplash.com/photo-1758270705317-3ef6142d306f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHw1fHxjb21tdW5pdHklMjBjb2xsYWJvcmF0aW9uJTIwcGVvcGxlfGVufDF8fHx8MTc3NzUxNzMwNXww&ixlib=rb-4.1.0&q=80&w=1080"
-                  alt="Community collaboration"
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
-              </motion.div>
-
-              <motion.div
-                whileHover={{ scale: 1.05, rotate: 2 }}
-                className="relative h-64 rounded-2xl overflow-hidden shadow-xl"
-              >
-                <ImageWithFallback
-                  src="https://images.unsplash.com/photo-1765408217678-545de3e8941d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHw0fHxtYXRoZW1hdGljcyUyMGFic3RyYWN0JTIwZWxlZ2FudHxlbnwxfHx8fDE3Nzc1MTczMDR8MA&ixlib=rb-4.1.0&q=80&w=1080"
-                  alt="Abstract mathematics"
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 bg-green-100 rounded flex items-center justify-center">
+                    <span className="text-green-700 text-sm font-bold">✓</span>
+                  </div>
+                  <div>
+                    <div className="text-sm font-semibold text-gray-900">최근 검증 완료</div>
+                    <div className="text-xs text-gray-500">페르마의 마지막 정리 (n=3)</div>
+                  </div>
+                </div>
               </motion.div>
             </div>
-
-            {/* Floating badge */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 1.2, duration: 0.5 }}
-              className="absolute -bottom-6 -left-6 bg-white rounded-2xl p-6 shadow-2xl"
-            >
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-gradient-to-br from-green-400 to-emerald-600 rounded-xl flex items-center justify-center">
-                  <span className="text-white text-2xl">✓</span>
-                </div>
-                <div>
-                  <div className="text-2xl font-bold text-gray-900">1,247</div>
-                  <div className="text-sm text-gray-600">검증된 정리</div>
-                </div>
-              </div>
-            </motion.div>
           </motion.div>
         </div>
       </div>

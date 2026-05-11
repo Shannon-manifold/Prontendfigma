@@ -50,19 +50,13 @@ export function RootLayout() {
             <div>
               <div className="flex items-center gap-2 mb-4">
                 <div
-                  className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+                  className={`w-7 h-7 rounded flex items-center justify-center text-sm font-bold ${
                     isChallengePage
-                      ? "bg-gradient-to-br from-amber-200 via-yellow-500 to-stone-700 shadow-lg shadow-amber-500/20"
-                      : "bg-indigo-600"
+                      ? "bg-gradient-to-br from-amber-200 via-yellow-500 to-stone-700 text-neutral-950"
+                      : "bg-gray-900 text-white"
                   }`}
                 >
-                  <span
-                    className={`font-bold text-lg ${
-                      isChallengePage ? "text-neutral-950" : "text-white"
-                    }`}
-                  >
-                    ∀
-                  </span>
+                  ∀
                 </div>
                 <h3
                   className={`font-bold ${

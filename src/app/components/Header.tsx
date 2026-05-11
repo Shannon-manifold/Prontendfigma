@@ -1,161 +1,113 @@
-import { Search, Bell, User, Menu, Sparkles } from 'lucide-react';
+import { Search, User, Menu, Sparkles } from 'lucide-react';
 import { motion } from 'motion/react';
 import { Link, useLocation } from 'react-router';
+import { NotificationPanel } from './NotificationPanel';
 
 export function Header() {
   const location = useLocation();
   const isChallengePage = location.pathname.startsWith('/challenges');
 
-  const isActive = (path: string) => {
-    return location.pathname === path;
-  };
+  const isActive = (path: string) => location.pathname === path;
 
   const navLinkClass = (path: string) => {
     if (isChallengePage) {
-      return `transition ${isActive(path)
-          ? 'text-amber-200 font-semibold'
-          : 'text-neutral-300 hover:text-amber-200'
-        }`;
-    }
-
-    return `transition ${isActive(path)
-        ? 'text-indigo-600 font-medium'
-        : 'text-gray-700 hover:text-indigo-600'
+      return `transition-colors ${isActive(path)
+        ? 'text-amber-200 font-semibold'
+        : 'text-neutral-400 hover:text-amber-200'
       }`;
+    }
+    return `transition-colors text-sm ${isActive(path)
+      ? 'text-gray-900 font-medium'
+      : 'text-gray-500 hover:text-gray-900'
+    }`;
   };
 
   return (
-    <motion.header
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.6, ease: "easeOut" }}
-      className={`sticky top-0 z-50 border-b backdrop-blur-xl transition-colors duration-[1800ms] ease-in-out ${isChallengePage
-          ? 'border-amber-300/20 bg-neutral-950/90 shadow-[0_1px_30px_rgba(251,191,36,0.18)]'
-          : 'border-gray-200 bg-white/80'
-        }`}
+    <header
+      className={`sticky top-0 z-50 border-b backdrop-blur-md transition-colors duration-700 ${isChallengePage
+        ? 'border-amber-300/20 bg-neutral-950/90 shadow-[0_1px_30px_rgba(251,191,36,0.18)]'
+        : 'border-gray-200 bg-white/90'
+      }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex items-center justify-between h-14">
           <div className="flex items-center gap-8">
             <Link to="/" className="flex items-center gap-2">
               <div
-                className={`w-8 h-8 rounded-lg flex items-center justify-center ${isChallengePage
-                    ? 'bg-gradient-to-br from-amber-200 via-yellow-500 to-stone-700 shadow-lg shadow-amber-500/25'
-                    : 'bg-indigo-600'
-                  }`}
+                className={`w-7 h-7 rounded flex items-center justify-center text-sm font-bold ${isChallengePage
+                  ? 'bg-gradient-to-br from-amber-200 via-yellow-500 to-stone-700 text-neutral-950'
+                  : 'bg-gray-900 text-white'
+                }`}
               >
-                <span
-                  className={`font-bold text-lg ${isChallengePage ? 'text-neutral-950' : 'text-white'
-                    }`}
-                >
-                  ∀
-                </span>
+                ∀
               </div>
-              <h1
-                className={`text-xl font-bold ${isChallengePage ? 'text-amber-100' : 'text-gray-900'
-                  }`}
-              >
+              <span className={`text-sm font-semibold tracking-tight ${isChallengePage ? 'text-amber-100' : 'text-gray-900'}`}>
                 ShannonManifold
-              </h1>
+              </span>
             </Link>
 
-            <nav className="hidden md:flex items-center gap-6">
-              <Link to="/proofs" className={navLinkClass('/proofs')}>
-                정리
-              </Link>
-              <Link to="/tutorials" className={navLinkClass('/tutorials')}>
-                튜토리얼
-              </Link>
+            <nav className="hidden md:flex items-center gap-5">
+              <Link to="/proofs" className={navLinkClass('/proofs')}>정리</Link>
+              <Link to="/tutorials" className={navLinkClass('/tutorials')}>튜토리얼</Link>
               <Link
                 to="/challenges"
-                className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-semibold transition shadow-sm ${isActive('/challenges')
-                    ? 'bg-gradient-to-r from-amber-200 via-yellow-400 to-amber-600 text-neutral-950 shadow-lg shadow-amber-500/30'
-                    : isChallengePage
-                      ? 'border border-amber-300/30 bg-amber-300/10 text-amber-200 hover:bg-amber-300 hover:text-neutral-950 hover:shadow-lg hover:shadow-amber-500/30'
-                      : 'bg-gray-950 text-amber-200 hover:bg-gradient-to-r hover:from-amber-400 hover:to-emerald-400 hover:text-gray-950 hover:shadow-lg hover:shadow-amber-200/60'
-                  }`}
+                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-semibold transition-colors ${isActive('/challenges')
+                  ? 'bg-amber-400 text-neutral-950'
+                  : isChallengePage
+                    ? 'border border-amber-300/30 bg-amber-300/10 text-amber-200 hover:bg-amber-300/20'
+                    : 'bg-gray-900 text-amber-200 hover:bg-gray-700'
+                }`}
               >
-                <Sparkles className="w-4 h-4" />
+                <Sparkles className="w-3.5 h-3.5" />
                 난제
               </Link>
-              <Link to="/qna" className={navLinkClass('/qna')}>
-                Q&A
-              </Link>
-              <Link to="/contributors" className={navLinkClass('/contributors')}>
-                기여자
-              </Link>
-              <a
-                href="#"
-                className={
-                  isChallengePage
-                    ? 'text-neutral-300 hover:text-amber-200 transition'
-                    : 'text-gray-700 hover:text-indigo-600 transition'
-                }
-              >
-                문서
-              </a>
-              <Link to="/blog" className={navLinkClass('/blog')}>
-                블로그
-              </Link>
+              <Link to="/qna" className={navLinkClass('/qna')}>Q&A</Link>
+              <Link to="/contributors" className={navLinkClass('/contributors')}>기여자</Link>
+              <Link to="/docs" className={navLinkClass('/docs')}>문서</Link>
+              <Link to="/blog" className={navLinkClass('/blog')}>블로그</Link>
             </nav>
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-1">
             <div
-              className={`hidden sm:flex items-center gap-2 rounded-lg px-3 py-2 border ${isChallengePage
-                  ? 'bg-white/5 border-amber-300/15'
-                  : 'bg-gray-100 border-transparent'
-                }`}
+              className={`hidden sm:flex items-center gap-2 rounded px-3 py-1.5 border text-sm ${isChallengePage
+                ? 'bg-white/5 border-amber-300/15'
+                : 'bg-gray-50 border-gray-200'
+              }`}
             >
-              <Search
-                className={`w-4 h-4 ${isChallengePage ? 'text-amber-200/70' : 'text-gray-400'
-                  }`}
-              />
+              <Search className={`w-3.5 h-3.5 ${isChallengePage ? 'text-amber-200/60' : 'text-gray-400'}`} />
               <input
                 type="text"
                 placeholder="정리 검색..."
-                className={`bg-transparent border-none outline-none text-sm w-48 ${isChallengePage
-                    ? 'text-amber-50 placeholder:text-neutral-500'
-                    : 'text-gray-900'
-                  }`}
+                className={`bg-transparent border-none outline-none text-sm w-40 ${isChallengePage
+                  ? 'text-amber-50 placeholder:text-neutral-500'
+                  : 'text-gray-900 placeholder:text-gray-400'
+                }`}
               />
             </div>
 
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
-              className={`p-2 rounded-lg transition ${isChallengePage
-                  ? 'text-neutral-300 hover:bg-amber-300/10 hover:text-amber-200'
-                  : 'hover:bg-gray-100'
-                }`}
-            >
-              <Bell className={`w-5 h-5 ${isChallengePage ? '' : 'text-gray-600'}`} />
-            </motion.button>
+            <NotificationPanel isChallengePage={isChallengePage} />
+
+            <Link to="/mypage">
+              <motion.div
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
+                className={`p-2 rounded transition-colors ${isChallengePage ? 'text-neutral-400 hover:text-amber-200' : 'text-gray-500 hover:bg-gray-100 hover:text-gray-900'}`}
+              >
+                <User className="w-4 h-4" />
+              </motion.div>
+            </Link>
 
             <motion.button
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
-              className={`p-2 rounded-lg transition ${isChallengePage
-                  ? 'text-neutral-300 hover:bg-amber-300/10 hover:text-amber-200'
-                  : 'hover:bg-gray-100'
-                }`}
+              className={`md:hidden p-2 rounded transition-colors ${isChallengePage ? 'text-neutral-400 hover:text-amber-200' : 'text-gray-500 hover:bg-gray-100 hover:text-gray-900'}`}
             >
-              <User className={`w-5 h-5 ${isChallengePage ? '' : 'text-gray-600'}`} />
-            </motion.button>
-
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
-              className={`md:hidden p-2 rounded-lg transition ${isChallengePage
-                  ? 'text-neutral-300 hover:bg-amber-300/10 hover:text-amber-200'
-                  : 'hover:bg-gray-100'
-                }`}
-            >
-              <Menu className={`w-5 h-5 ${isChallengePage ? '' : 'text-gray-600'}`} />
+              <Menu className="w-4 h-4" />
             </motion.button>
           </div>
         </div>
       </div>
-    </motion.header>
+    </header>
   );
 }

@@ -1,0 +1,456 @@
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
+import { Link } from 'react-router';
+import {
+  BookOpen, MessageSquare, Heart, Award,
+  Edit3, Check, X, ChevronRight, Bookmark,
+  Bell, Shield, Trash2, ExternalLink, LogOut,
+  CheckCircle, Clock, HelpCircle,
+} from 'lucide-react';
+
+/* ─── mock data ─────────────────────────────────────── */
+const USER = {
+  name: '테스트',
+  email: 'test@shannonmanifold.io',
+  system: 'Lean 4',
+  bio: '수학의 엄밀성을 코드로 증명합니다.',
+  joinDate: '2026년 1월',
+};
+
+const STATS = [
+  { label: '제출한 증명', value: 12, icon: BookOpen },
+  { label: 'Q&A 답변', value: 34, icon: MessageSquare },
+  { label: '받은 좋아요', value: 128, icon: Heart },
+  { label: '기여 포인트', value: '2,450', icon: Award },
+];
+
+const MY_PROOFS = [
+  { id: 1, title: '페르마의 소정리 (Lean 4)', system: 'Lean 4', status: 'verified', likes: 24, comments: 6, date: '2026.04.12' },
+  { id: 2, title: '힐베르트 공간의 완비성', system: 'Lean 4', status: 'verified', likes: 17, comments: 3, date: '2026.03.28' },
+  { id: 3, title: '체비쇼프 부등식', system: 'Lean 4', status: 'pending', likes: 5, comments: 1, date: '2026.05.02' },
+  { id: 4, title: '리만 적분 가능 조건', system: 'Lean 4', status: 'verified', likes: 31, comments: 9, date: '2026.02.15' },
+];
+
+const MY_QNA = [
+  { id: 1, type: 'question', title: 'Lean 4에서 nat.rec 없이 귀납법을 쓸 수 있나요?', answers: 3, views: 142, date: '2026.04.20', solved: true },
+  { id: 2, type: 'answer', title: 'Coq에서 dependent type을 다루는 방법', answered: '내 답변이 채택됨', date: '2026.04.08', solved: true },
+  { id: 3, type: 'question', title: 'Agda의 with 패턴과 case split 차이', answers: 1, views: 67, date: '2026.05.01', solved: false },
+  { id: 4, type: 'answer', title: 'setoid rewriting in Lean 4', answered: '답변함', date: '2026.03.15', solved: false },
+];
+
+const BOOKMARKS = [
+  { id: 1, title: '연속 함수의 극값 정리', author: 'mathproof_kr', system: 'Isabelle', likes: 89, date: '2026.04.05' },
+  { id: 2, title: '유한군의 라그랑주 정리', author: 'lean_alice', system: 'Lean 4', likes: 201, date: '2026.03.22' },
+  { id: 3, title: 'Cantor-Schroeder-Bernstein', author: 'coq_master', system: 'Coq', likes: 156, date: '2026.02.28' },
+];
+
+/* ─── sub-components ─────────────────────────────────── */
+const StatusBadge = ({ status }: { status: string }) =>
+  status === 'verified' ? (
+    <span className="inline-flex items-center gap-1 text-xs font-medium text-green-700 bg-green-50 border border-green-200 px-2 py-0.5 rounded-full">
+      <CheckCircle className="w-3 h-3" />검증됨
+    </span>
+  ) : (
+    <span className="inline-flex items-center gap-1 text-xs font-medium text-amber-700 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-full">
+      <Clock className="w-3 h-3" />검토 중
+    </span>
+  );
+
+function ProofsTab() {
+  return (
+    <div className="space-y-3">
+      {MY_PROOFS.map((proof, i) => (
+        <motion.div
+          key={proof.id}
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: i * 0.06 }}
+          whileHover={{ y: -1 }}
+          className="p-4 border border-gray-200 rounded-lg bg-white hover:shadow-sm transition-shadow"
+        >
+          <div className="flex items-start justify-between gap-3">
+            <div className="min-w-0">
+              <div className="flex items-center gap-2 mb-1.5 flex-wrap">
+                <StatusBadge status={proof.status} />
+                <span className="text-xs text-gray-400">{proof.system}</span>
+              </div>
+              <p className="text-sm font-medium text-gray-900 truncate">{proof.title}</p>
+              <p className="text-xs text-gray-400 mt-1">{proof.date}</p>
+            </div>
+            <div className="flex items-center gap-3 text-xs text-gray-400 flex-shrink-0">
+              <span className="flex items-center gap-1"><Heart className="w-3.5 h-3.5" />{proof.likes}</span>
+              <span className="flex items-center gap-1"><MessageSquare className="w-3.5 h-3.5" />{proof.comments}</span>
+              <motion.button whileHover={{ x: 2 }} className="text-gray-400 hover:text-gray-700 transition-colors">
+                <ChevronRight className="w-4 h-4" />
+              </motion.button>
+            </div>
+          </div>
+        </motion.div>
+      ))}
+    </div>
+  );
+}
+
+function QnATab() {
+  return (
+    <div className="space-y-3">
+      {MY_QNA.map((item, i) => (
+        <motion.div
+          key={item.id}
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: i * 0.06 }}
+          whileHover={{ y: -1 }}
+          className="p-4 border border-gray-200 rounded-lg bg-white hover:shadow-sm transition-shadow"
+        >
+          <div className="flex items-start justify-between gap-3">
+            <div className="min-w-0">
+              <div className="flex items-center gap-2 mb-1.5">
+                {item.type === 'question' ? (
+                  <span className="inline-flex items-center gap-1 text-xs font-medium text-indigo-700 bg-indigo-50 border border-indigo-200 px-2 py-0.5 rounded-full">
+                    <HelpCircle className="w-3 h-3" />질문
+                  </span>
+                ) : (
+                  <span className="inline-flex items-center gap-1 text-xs font-medium text-blue-700 bg-blue-50 border border-blue-200 px-2 py-0.5 rounded-full">
+                    <MessageSquare className="w-3 h-3" />답변
+                  </span>
+                )}
+                {item.solved && (
+                  <span className="text-xs text-green-600 font-medium">✓ 해결됨</span>
+                )}
+              </div>
+              <p className="text-sm font-medium text-gray-900 leading-snug">{item.title}</p>
+              <p className="text-xs text-gray-400 mt-1">
+                {item.type === 'question'
+                  ? `답변 ${item.answers}개 · 조회 ${item.views}회 · ${item.date}`
+                  : `${item.answered} · ${item.date}`}
+              </p>
+            </div>
+            <motion.button whileHover={{ x: 2 }} className="text-gray-400 hover:text-gray-700 transition-colors flex-shrink-0">
+              <ChevronRight className="w-4 h-4" />
+            </motion.button>
+          </div>
+        </motion.div>
+      ))}
+    </div>
+  );
+}
+
+function BookmarksTab() {
+  const [list, setList] = useState(BOOKMARKS);
+
+  const remove = (id: number) => setList((prev) => prev.filter((b) => b.id !== id));
+
+  return (
+    <div className="space-y-3">
+      <AnimatePresence>
+        {list.map((item, i) => (
+          <motion.div
+            key={item.id}
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, height: 0, marginTop: 0, overflow: 'hidden' }}
+            transition={{ delay: i * 0.06 }}
+            whileHover={{ y: -1 }}
+            className="p-4 border border-gray-200 rounded-lg bg-white hover:shadow-sm transition-shadow"
+          >
+            <div className="flex items-start justify-between gap-3">
+              <div className="min-w-0">
+                <div className="flex items-center gap-2 mb-1.5">
+                  <span className="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded">{item.system}</span>
+                </div>
+                <p className="text-sm font-medium text-gray-900">{item.title}</p>
+                <p className="text-xs text-gray-400 mt-1">
+                  by {item.author} · <Heart className="w-3 h-3 inline" /> {item.likes} · {item.date}
+                </p>
+              </div>
+              <div className="flex items-center gap-1 flex-shrink-0">
+                <motion.button
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  className="p-1.5 text-gray-400 hover:text-gray-700 transition-colors rounded"
+                >
+                  <ExternalLink className="w-3.5 h-3.5" />
+                </motion.button>
+                <motion.button
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  onClick={() => remove(item.id)}
+                  className="p-1.5 text-gray-400 hover:text-red-500 transition-colors rounded"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </motion.button>
+              </div>
+            </div>
+          </motion.div>
+        ))}
+      </AnimatePresence>
+      {list.length === 0 && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="py-12 text-center text-sm text-gray-400"
+        >
+          <Bookmark className="w-8 h-8 mx-auto mb-3 text-gray-200" />
+          북마크한 증명이 없습니다
+        </motion.div>
+      )}
+    </div>
+  );
+}
+
+function SettingsTab() {
+  const [notifications, setNotifications] = useState({
+    email: true,
+    answer: true,
+    like: false,
+    challenge: true,
+  });
+
+  const toggle = (key: keyof typeof notifications) =>
+    setNotifications((n) => ({ ...n, [key]: !n[key] }));
+
+  const NOTIF_ITEMS = [
+    { key: 'email' as const, label: '이메일 알림', desc: '서비스 공지 및 주요 알림' },
+    { key: 'answer' as const, label: '답변 알림', desc: '내 질문에 새 답변이 달릴 때' },
+    { key: 'like' as const, label: '좋아요 알림', desc: '내 증명/답변에 좋아요를 받을 때' },
+    { key: 'challenge' as const, label: '난제 알림', desc: '후원 난제 상태 변경 시' },
+  ];
+
+  return (
+    <div className="space-y-6">
+      {/* 알림 설정 */}
+      <section>
+        <div className="flex items-center gap-2 mb-4">
+          <Bell className="w-4 h-4 text-gray-500" />
+          <h3 className="text-sm font-semibold text-gray-900">알림 설정</h3>
+        </div>
+        <div className="space-y-3">
+          {NOTIF_ITEMS.map((item) => (
+            <div key={item.key} className="flex items-center justify-between py-2.5 border-b border-gray-100 last:border-0">
+              <div>
+                <p className="text-sm text-gray-900">{item.label}</p>
+                <p className="text-xs text-gray-400 mt-0.5">{item.desc}</p>
+              </div>
+              <motion.button
+                whileTap={{ scale: 0.9 }}
+                onClick={() => toggle(item.key)}
+                className={`relative w-10 h-5.5 rounded-full transition-colors flex-shrink-0 ${notifications[item.key] ? 'bg-indigo-600' : 'bg-gray-200'}`}
+                style={{ height: '1.375rem' }}
+              >
+                <motion.div
+                  animate={{ x: notifications[item.key] ? 18 : 2 }}
+                  transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+                  className="absolute top-0.5 w-4 h-4 rounded-full bg-white shadow"
+                />
+              </motion.button>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* 보안 */}
+      <section>
+        <div className="flex items-center gap-2 mb-4">
+          <Shield className="w-4 h-4 text-gray-500" />
+          <h3 className="text-sm font-semibold text-gray-900">보안</h3>
+        </div>
+        <div className="space-y-2">
+          <Link to="/forgot-password">
+            <motion.div
+              whileHover={{ x: 2 }}
+              className="flex items-center justify-between py-2.5 px-3 border border-gray-200 rounded-lg text-sm text-gray-700 hover:bg-gray-50 transition-colors cursor-pointer"
+            >
+              비밀번호 변경
+              <ChevronRight className="w-4 h-4 text-gray-400" />
+            </motion.div>
+          </Link>
+        </div>
+      </section>
+
+      {/* 계정 */}
+      <section>
+        <div className="flex items-center gap-2 mb-4">
+          <Trash2 className="w-4 h-4 text-gray-500" />
+          <h3 className="text-sm font-semibold text-gray-900">계정</h3>
+        </div>
+        <Link to="/">
+          <motion.div
+            whileHover={{ x: 2 }}
+            className="flex items-center justify-between py-2.5 px-3 border border-gray-200 rounded-lg text-sm text-gray-700 hover:bg-gray-50 transition-colors cursor-pointer mb-2"
+          >
+            <span className="flex items-center gap-2"><LogOut className="w-4 h-4" />로그아웃</span>
+            <ChevronRight className="w-4 h-4 text-gray-400" />
+          </motion.div>
+        </Link>
+        <motion.button
+          whileHover={{ x: 2 }}
+          className="w-full flex items-center justify-between py-2.5 px-3 border border-red-200 rounded-lg text-sm text-red-600 hover:bg-red-50 transition-colors"
+        >
+          <span className="flex items-center gap-2"><Trash2 className="w-4 h-4" />계정 삭제</span>
+          <ChevronRight className="w-4 h-4 text-red-400" />
+        </motion.button>
+      </section>
+    </div>
+  );
+}
+
+/* ─── main page ──────────────────────────────────────── */
+const TABS = [
+  { id: 'proofs', label: '내 증명', count: MY_PROOFS.length },
+  { id: 'qna', label: 'Q&A 활동', count: MY_QNA.length },
+  { id: 'bookmarks', label: '북마크', count: BOOKMARKS.length },
+  { id: 'settings', label: '설정', count: null },
+];
+
+export function MyPage() {
+  const [activeTab, setActiveTab] = useState('proofs');
+  const [editingBio, setEditingBio] = useState(false);
+  const [bio, setBio] = useState(USER.bio);
+  const [draftBio, setDraftBio] = useState(USER.bio);
+
+  const saveBio = () => { setBio(draftBio); setEditingBio(false); };
+  const cancelBio = () => { setDraftBio(bio); setEditingBio(false); };
+
+  return (
+    <div className="max-w-3xl mx-auto px-4 sm:px-6 py-10">
+
+      {/* 프로필 헤더 */}
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4 }}
+        className="flex items-start gap-5 mb-8 pb-8 border-b border-gray-200"
+      >
+        {/* 아바타 */}
+        <div className="w-16 h-16 rounded-full bg-gray-900 flex items-center justify-center text-white text-xl font-bold flex-shrink-0 select-none">
+          {USER.name[0]}
+        </div>
+
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-3 flex-wrap mb-1">
+            <h1 className="text-xl font-bold text-gray-900">{USER.name}</h1>
+            <span className="text-xs font-medium text-indigo-700 bg-indigo-50 border border-indigo-200 px-2 py-0.5 rounded-full">
+              {USER.system}
+            </span>
+          </div>
+          <p className="text-sm text-gray-500 mb-2">{USER.email}</p>
+
+          {/* 소개 편집 */}
+          <AnimatePresence mode="wait">
+            {editingBio ? (
+              <motion.div
+                key="edit"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="flex items-center gap-2"
+              >
+                <input
+                  autoFocus
+                  value={draftBio}
+                  onChange={(e) => setDraftBio(e.target.value)}
+                  onKeyDown={(e) => { if (e.key === 'Enter') saveBio(); if (e.key === 'Escape') cancelBio(); }}
+                  className="flex-1 text-sm text-gray-700 border border-indigo-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                />
+                <motion.button whileTap={{ scale: 0.9 }} onClick={saveBio} className="text-green-600 hover:text-green-700 transition-colors">
+                  <Check className="w-4 h-4" />
+                </motion.button>
+                <motion.button whileTap={{ scale: 0.9 }} onClick={cancelBio} className="text-gray-400 hover:text-gray-600 transition-colors">
+                  <X className="w-4 h-4" />
+                </motion.button>
+              </motion.div>
+            ) : (
+              <motion.button
+                key="view"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={() => { setDraftBio(bio); setEditingBio(true); }}
+                className="flex items-center gap-1.5 text-sm text-gray-600 hover:text-gray-900 transition-colors group"
+              >
+                {bio}
+                <Edit3 className="w-3.5 h-3.5 text-gray-300 group-hover:text-gray-500 transition-colors" />
+              </motion.button>
+            )}
+          </AnimatePresence>
+
+          <p className="text-xs text-gray-400 mt-2">{USER.joinDate} 가입</p>
+        </div>
+      </motion.div>
+
+      {/* 통계 */}
+      <motion.div
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, delay: 0.1 }}
+        className="grid grid-cols-4 gap-3 mb-8"
+      >
+        {STATS.map((stat, i) => (
+          <motion.div
+            key={stat.label}
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.15 + i * 0.06 }}
+            className="p-3 border border-gray-200 rounded-lg text-center bg-white"
+          >
+            <stat.icon className="w-4 h-4 text-gray-400 mx-auto mb-1.5" />
+            <p className="text-lg font-bold text-gray-900">{stat.value}</p>
+            <p className="text-xs text-gray-400">{stat.label}</p>
+          </motion.div>
+        ))}
+      </motion.div>
+
+      {/* 탭 */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.2 }}
+      >
+        <div className="flex border-b border-gray-200 mb-6 gap-1">
+          {TABS.map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`relative px-4 py-2.5 text-sm font-medium transition-colors ${
+                activeTab === tab.id ? 'text-gray-900' : 'text-gray-500 hover:text-gray-700'
+              }`}
+            >
+              <span className="flex items-center gap-1.5">
+                {tab.label}
+                {tab.count !== null && (
+                  <span className={`text-xs px-1.5 py-0.5 rounded-full ${
+                    activeTab === tab.id ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-500'
+                  }`}>
+                    {tab.count}
+                  </span>
+                )}
+              </span>
+              {activeTab === tab.id && (
+                <motion.div
+                  layoutId="tab-indicator"
+                  className="absolute bottom-0 left-0 right-0 h-0.5 bg-gray-900 rounded-t"
+                />
+              )}
+            </button>
+          ))}
+        </div>
+
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeTab}
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -6 }}
+            transition={{ duration: 0.2 }}
+          >
+            {activeTab === 'proofs' && <ProofsTab />}
+            {activeTab === 'qna' && <QnATab />}
+            {activeTab === 'bookmarks' && <BookmarksTab />}
+            {activeTab === 'settings' && <SettingsTab />}
+          </motion.div>
+        </AnimatePresence>
+      </motion.div>
+    </div>
+  );
+}
