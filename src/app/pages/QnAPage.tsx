@@ -136,7 +136,7 @@ export function QnAPage() {
                 <ImageWithFallback
                   src="https://upload.wikimedia.org/wikipedia/commons/7/79/Hilbert.jpg"
                   alt="David Hilbert"
-                  className="w-full h-full object-contain"
+                  className="w-full h-full object-cover object-center"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
               </div>
@@ -152,15 +152,17 @@ export function QnAPage() {
                 <span className="inline-block px-4 py-2 bg-indigo-100 rounded-full text-sm text-indigo-700 font-medium mb-6">
                   Q&A
                 </span>
-                <div className="text-7xl text-indigo-600 opacity-20 font-serif leading-none mb-4">
-                  "
-                </div>
               </div>
 
-              <blockquote className="text-3xl sm:text-4xl lg:text-5xl font-serif text-gray-900 mb-8 leading-tight italic">
-                우리는 알아야만 한다,
-                <br />
-                우리는 알게 될 것이다.
+              <blockquote className="relative border-l-4 border-indigo-500 pl-6 mb-8">
+                <p className="text-3xl sm:text-4xl lg:text-5xl font-semibold text-gray-900 leading-snug tracking-normal">
+                  우리는 알아야만 한다,
+                  <br />
+                  우리는 알게 될 것이다.
+                </p>
+                <p className="mt-5 text-base text-gray-500">
+                  Wir müssen wissen. Wir werden wissen.
+                </p>
               </blockquote>
 
               <div className="border-t border-gray-300 pt-6">
@@ -171,7 +173,7 @@ export function QnAPage() {
                   David Hilbert
                 </div>
                 <div className="text-indigo-600 font-medium text-sm">
-                  현대 수학의 거장 · 1862-1943
+                  20세기 수학의 선구자 · 1862-1943
                 </div>
               </div>
             </motion.div>
@@ -267,7 +269,7 @@ export function QnAPage() {
                   >
                     {
                       statusLabels[
-                        question.status as keyof typeof statusLabels
+                      question.status as keyof typeof statusLabels
                       ]
                     }
                   </span>
