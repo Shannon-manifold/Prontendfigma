@@ -2,11 +2,15 @@ import { createBrowserRouter } from "react-router";
 import { RootLayout } from "./layouts/RootLayout";
 import { HomePage } from "./pages/HomePage";
 import { BlogPage } from "./pages/BlogPage";
+import { BlogDetailPage } from "./pages/BlogDetailPage";
 import { TutorialsPage } from "./pages/TutorialsPage";
 import { TutorialDetailPage } from "./pages/TutorialDetailPage";
 import { QnAPage } from "./pages/QnAPage";
+import { QnADetailPage } from "./pages/QnADetailPage";
 import { ProofsPage } from "./pages/ProofsPage";
+import { ProofDetailPage } from "./pages/ProofDetailPage";
 import { ContributorsPage } from "./pages/ContributorsPage";
+import { ContributorDetailPage } from "./pages/ContributorDetailPage";
 import { ChallengesPage } from "./pages/ChallengesPage";
 import { DocsPage } from "./pages/DocsPage";
 import { MyPage } from "./pages/MyPage";
@@ -24,10 +28,14 @@ export const router = createBrowserRouter([
     children: [
       { index: true, Component: HomePage },
       { path: "blog", Component: BlogPage },
+      { path: "blog/:blogId", Component: BlogDetailPage },
       { path: "tutorials", Component: TutorialsPage },
       { path: "qna", Component: QnAPage },
+      { path: "qna/:questionId", Component: QnADetailPage },
       { path: "proofs", Component: ProofsPage },
+      { path: "proofs/:proofId", Component: ProofDetailPage },
       { path: "contributors", Component: ContributorsPage },
+      { path: "contributors/:contributorId", Component: ContributorDetailPage },
       { path: "challenges", Component: ChallengesPage },
       { path: "docs", Component: DocsPage },
       { path: "mypage", Component: MyPage },

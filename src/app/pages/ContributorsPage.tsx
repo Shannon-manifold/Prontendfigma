@@ -1,6 +1,8 @@
 import { motion } from "motion/react";
 import { Award, BookOpen, CheckCircle, Code2, MessageCircle, Star, Users } from "lucide-react";
 import { ImageWithFallback } from "../components/ImageWithFallback";
+import { Link } from "react-router";
+import { contributors } from "../data/contributors";
 
 const newtonPortraitUrl =
   "https://commons.wikimedia.org/wiki/Special:FilePath/Portrait_of_Sir_Isaac_Newton%2C_1689_%28brightened%29.jpg?width=900";
@@ -13,14 +15,7 @@ export function ContributorsPage() {
     { label: "학습 자료", value: "186", icon: BookOpen, color: "text-purple-600" },
   ];
 
-  const contributors = [
-    { name: "김수학", role: "Lean 4 증명 기여자", field: "정수론 · 대수학", proofs: 128, answers: 342, reputation: "12.8K", badge: "Top Prover", initial: "김" },
-    { name: "박증명", role: "Isabelle/HOL 리뷰어", field: "해석학 · 형식 검증", proofs: 97, answers: 286, reputation: "10.4K", badge: "Reviewer", initial: "박" },
-    { name: "정해석", role: "Coq 튜토리얼 작성자", field: "미적분학 · 교육", proofs: 84, answers: 221, reputation: "9.7K", badge: "Educator", initial: "정" },
-    { name: "최알고", role: "자동화 도구 개발자", field: "알고리즘 · Lean tactic", proofs: 76, answers: 198, reputation: "8.9K", badge: "Builder", initial: "최" },
-    { name: "이정리", role: "커뮤니티 멘토", field: "논리학 · 집합론", proofs: 69, answers: 254, reputation: "8.1K", badge: "Mentor", initial: "이" },
-    { name: "강기하", role: "Agda 연구 기여자", field: "타입 이론 · 기하학", proofs: 58, answers: 143, reputation: "6.6K", badge: "Researcher", initial: "강" },
-  ];
+
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -100,53 +95,54 @@ export function ContributorsPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
             {contributors.map((contributor, index) => (
-              <motion.article
-                key={contributor.name}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.07, duration: 0.4 }}
-                whileHover={{ y: -4 }}
-                className="bg-white border border-gray-200 rounded-lg p-5 hover:border-gray-300 hover:shadow-md transition-all"
-              >
-                <div className="flex items-start justify-between gap-4 mb-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-11 h-11 bg-gray-900 text-white rounded flex items-center justify-center text-base font-semibold flex-shrink-0">
-                      {contributor.initial}
+              <Link key={contributor.id} to={`/contributors/${contributor.id}`} className="block">
+                <motion.article
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.07, duration: 0.4 }}
+                  whileHover={{ y: -4 }}
+                  className="bg-white border border-gray-200 rounded-lg p-5 hover:border-gray-300 hover:shadow-md transition-all cursor-pointer"
+                >
+                  <div className="flex items-start justify-between gap-4 mb-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-11 h-11 bg-gray-900 text-white rounded flex items-center justify-center text-base font-semibold flex-shrink-0">
+                        {contributor.initial}
+                      </div>
+                      <div>
+                        <h2 className="text-sm font-semibold text-gray-900">{contributor.name}</h2>
+                        <p className="text-xs text-gray-500">{contributor.role}</p>
+                      </div>
+                    </div>
+                    <span className="px-2 py-0.5 bg-indigo-50 text-indigo-700 border border-indigo-100 rounded text-xs font-medium">
+                      {contributor.badge}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center gap-2 text-xs text-gray-500 mb-4">
+                    <Code2 className="w-3.5 h-3.5 text-gray-400" />
+                    <span>{contributor.field}</span>
+                  </div>
+
+                  <div className="grid grid-cols-3 gap-3 pt-4 border-t border-gray-100">
+                    <div>
+                      <div className="text-base font-bold text-gray-900">{contributor.proofs}</div>
+                      <div className="text-xs text-gray-400">증명</div>
                     </div>
                     <div>
-                      <h2 className="text-sm font-semibold text-gray-900">{contributor.name}</h2>
-                      <p className="text-xs text-gray-500">{contributor.role}</p>
+                      <div className="text-base font-bold text-gray-900">{contributor.answers}</div>
+                      <div className="text-xs text-gray-400">답변</div>
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-1 text-base font-bold text-gray-900">
+                        <Star className="w-3.5 h-3.5 text-yellow-500 fill-yellow-500" />
+                        {contributor.reputation}
+                      </div>
+                      <div className="text-xs text-gray-400">평판</div>
                     </div>
                   </div>
-                  <span className="px-2 py-0.5 bg-indigo-50 text-indigo-700 border border-indigo-100 rounded text-xs font-medium">
-                    {contributor.badge}
-                  </span>
-                </div>
-
-                <div className="flex items-center gap-2 text-xs text-gray-500 mb-4">
-                  <Code2 className="w-3.5 h-3.5 text-gray-400" />
-                  <span>{contributor.field}</span>
-                </div>
-
-                <div className="grid grid-cols-3 gap-3 pt-4 border-t border-gray-100">
-                  <div>
-                    <div className="text-base font-bold text-gray-900">{contributor.proofs}</div>
-                    <div className="text-xs text-gray-400">증명</div>
-                  </div>
-                  <div>
-                    <div className="text-base font-bold text-gray-900">{contributor.answers}</div>
-                    <div className="text-xs text-gray-400">답변</div>
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-1 text-base font-bold text-gray-900">
-                      <Star className="w-3.5 h-3.5 text-yellow-500 fill-yellow-500" />
-                      {contributor.reputation}
-                    </div>
-                    <div className="text-xs text-gray-400">평판</div>
-                  </div>
-                </div>
-              </motion.article>
+                </motion.article>
+              </Link>
             ))}
           </div>
 

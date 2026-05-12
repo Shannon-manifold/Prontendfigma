@@ -1,0 +1,161 @@
+import { useParams, Link } from "react-router";
+import { motion } from "motion/react";
+import { ArrowLeft, Calendar, Clock, User, Heart, MessageSquare, Share2, Bookmark } from "lucide-react";
+import { getBlogPostById, blogPosts } from "../data/blogPosts";
+import { ImageWithFallback } from "../components/ImageWithFallback";
+import { useEffect, useState } from "react";
+
+function renderMarkdown(md: string): string {
+  let html = md;
+  // h3
+  html = html.replace(/^### (.+)$/gm, '<h3 class="text-base font-semibold text-gray-900 mt-6 mb-2">$1</h3>');
+  // h2
+  html = html.replace(/^## (.+)$/gm, '<h2 class="text-lg font-bold text-gray-900 mt-8 mb-3">$1</h2>');
+  // bold
+  html = html.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
+  // inline code
+  html = html.replace(/`([^`]+)`/g, '<code class="px-1.5 py-0.5 bg-gray-100 rounded text-sm font-mono text-indigo-700">$1</code>');
+  // code blocks
+  html = html.replace(/```(\w+)?\n([\s\S]*?)```/g, (_m, _lang, code) =>
+    `<pre class="bg-gray-900 text-gray-200 rounded-lg p-5 overflow-x-auto text-sm leading-relaxed my-4 font-mono">${code.trim()}</pre>`
+  );
+  // table
+  html = html.replace(
+    /\|(.+)\|\n\|[-| ]+\|\n((?:\|.+\|\n?)+)/g,
+    (_m, headerRow: string, bodyRows: string) => {
+      const headers = headerRow.split("|").map((h: string) => h.trim()).filter(Boolean);
+      const rows = bodyRows.trim().split("\n").map((row: string) =>
+        row.split("|").map((c: string) => c.trim()).filter(Boolean)
+      );
+      return `<div class="overflow-x-auto my-4"><table class="w-full text-sm border border-gray-200 rounded-lg overflow-hidden">
+        <thead><tr class="bg-gray-50">${headers.map((h: string) => `<th class="px-4 py-2 text-left font-semibold text-gray-700 border-b border-gray-200">${h}</th>`).join("")}</tr></thead>
+        <tbody>${rows.map((row: string[]) => `<tr class="border-b border-gray-100">${row.map((c: string) => `<td class="px-4 py-2 text-gray-600">${c}</td>`).join("")}</tr>`).join("")}</tbody>
+      </table></div>`;
+    }
+  );
+  // unordered list
+  html = html.replace(/^- (.+)$/gm, '<li class="ml-5 list-disc text-gray-600 mb-1">$1</li>');
+  html = html.replace(/(<li[^>]*>.*<\/li>\n?)+/g, (match) => `<ul class="my-2">${match}</ul>`);
+  // numbered list
+  html = html.replace(/^\d+\. (.+)$/gm, '<li class="ml-5 list-decimal text-gray-600 mb-1">$1</li>');
+  // paragraphs
+  html = html.split("\n\n").map((block) => {
+    const trimmed = block.trim();
+    if (!trimmed || trimmed.startsWith("<h") || trimmed.startsWith("<pre") || trimmed.startsWith("<ul") || trimmed.startsWith("<ol") || trimmed.startsWith("<div") || trimmed.startsWith("<li")) return trimmed;
+    return `<p class="text-gray-600 leading-relaxed mb-4">${trimmed}</p>`;
+  }).join("\n");
+
+  return html;
+}
+
+export function BlogDetailPage() {
+  const { blogId } = useParams();
+  const post = getBlogPostById(blogId || "");
+  const [liked, setLiked] = useState(false);
+  const [bookmarked, setBookmarked] = useState(false);
+
+  useEffect(() => { window.scrollTo(0, 0); }, [blogId]);
+
+  if (!post) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="text-center">
+          <div className="text-6xl mb-4">📝</div>
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">포스트를 찾을 수 없습니다</h1>
+          <p className="text-gray-500 mb-6">요청하신 블로그 글이 존재하지 않습니다.</p>
+          <Link to="/blog" className="inline-flex items-center gap-2 px-5 py-2.5 bg-gray-900 text-white text-sm rounded-lg hover:bg-gray-700 transition-colors">
+            <ArrowLeft className="w-4 h-4" />블로그 목록으로
+          </Link>
+        </motion.div>
+      </div>
+    );
+  }
+
+  const relatedPosts = blogPosts.filter((p) => p.id !== post.id).slice(0, 3);
+  const renderedContent = renderMarkdown(post.content);
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      {/* Back bar */}
+      <div className="bg-white border-b border-gray-200 sticky top-14 z-40">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
+          <Link to="/blog" className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-900 transition-colors">
+            <ArrowLeft className="w-4 h-4" />블로그
+          </Link>
+          <div className="flex items-center gap-2">
+            <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={() => setBookmarked(!bookmarked)}
+              className={`p-2 rounded-lg transition-colors ${bookmarked ? "text-indigo-600 bg-indigo-50" : "text-gray-400 hover:text-gray-600 hover:bg-gray-100"}`}>
+              <Bookmark className="w-4 h-4" fill={bookmarked ? "currentColor" : "none"} />
+            </motion.button>
+            <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="p-2 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors">
+              <Share2 className="w-4 h-4" />
+            </motion.button>
+          </div>
+        </div>
+      </div>
+
+      <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+          {/* Hero image */}
+          <div className="relative h-64 sm:h-80 rounded-xl overflow-hidden mb-8 bg-gray-100">
+            <ImageWithFallback src={post.image} alt={post.title} className="w-full h-full object-cover" />
+            <div className="absolute top-4 left-4">
+              <span className="px-3 py-1 bg-white/95 rounded-full text-xs font-medium text-gray-700">{post.category}</span>
+            </div>
+          </div>
+
+          {/* Title */}
+          <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4 leading-tight">{post.title}</h1>
+          <p className="text-lg text-gray-500 mb-6 leading-relaxed">{post.excerpt}</p>
+
+          {/* Meta */}
+          <div className="flex items-center gap-4 pb-8 border-b border-gray-200 text-sm text-gray-500">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-400 to-purple-500 flex items-center justify-center text-white text-xs font-bold">{post.author[0]}</div>
+              <span className="font-medium text-gray-700">{post.author}</span>
+            </div>
+            <span>·</span>
+            <div className="flex items-center gap-1"><Calendar className="w-3.5 h-3.5" />{post.date}</div>
+            <span>·</span>
+            <div className="flex items-center gap-1"><Clock className="w-3.5 h-3.5" />{post.readTime} 읽기</div>
+          </div>
+
+          {/* Content */}
+          <div className="py-8 blog-content" dangerouslySetInnerHTML={{ __html: renderedContent }} />
+
+          {/* Actions */}
+          <div className="flex items-center gap-4 pt-6 border-t border-gray-200">
+            <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={() => setLiked(!liked)}
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg border text-sm font-medium transition-colors ${liked ? "border-red-200 bg-red-50 text-red-600" : "border-gray-200 text-gray-600 hover:bg-gray-50"}`}>
+              <Heart className="w-4 h-4" fill={liked ? "currentColor" : "none"} />{liked ? "좋아요 취소" : "좋아요"}
+            </motion.button>
+            <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
+              className="flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-200 text-gray-600 text-sm font-medium hover:bg-gray-50 transition-colors">
+              <MessageSquare className="w-4 h-4" />댓글
+            </motion.button>
+          </div>
+        </motion.div>
+
+        {/* Related posts */}
+        {relatedPosts.length > 0 && (
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mt-16 pt-10 border-t border-gray-200">
+            <h2 className="text-lg font-semibold text-gray-900 mb-6">관련 포스트</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              {relatedPosts.map((rp) => (
+                <Link key={rp.id} to={`/blog/${rp.id}`} className="group block bg-white border border-gray-200 rounded-lg overflow-hidden hover:border-gray-300 hover:shadow-md transition-all">
+                  <div className="h-32 overflow-hidden bg-gray-100">
+                    <ImageWithFallback src={rp.image} alt={rp.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                  </div>
+                  <div className="p-4">
+                    <div className="text-xs text-gray-400 mb-1">{rp.category}</div>
+                    <h3 className="text-sm font-semibold text-gray-900 line-clamp-2 group-hover:text-indigo-600 transition-colors">{rp.title}</h3>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </article>
+    </div>
+  );
+}

@@ -1,3 +1,56 @@
 @import './fonts.css';
 @import './tailwind.css';
 @import './theme.css';
+
+/* Proof content styles for LaTeX rendering */
+.proof-content {
+  font-size: 1rem;
+  line-height: 1.85;
+  color: #1f2937;
+}
+
+.proof-content .latex-paragraph {
+  margin-bottom: 1rem;
+}
+
+.proof-content strong {
+  font-weight: 700;
+  color: #111827;
+}
+
+.proof-content .proof-block {
+  margin: 1.5rem 0;
+  padding: 1.25rem 1.5rem;
+  background: #f9fafb;
+  border-left: 3px solid #6366f1;
+  border-radius: 0 0.5rem 0.5rem 0;
+}
+
+.proof-content .qed {
+  float: right;
+  font-size: 1.1em;
+  color: #6366f1;
+}
+
+.proof-content .katex-display {
+  margin: 1.25rem 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.5rem 0;
+}
+
+.proof-content .latex-enumerate {
+  list-style: decimal;
+  padding-left: 1.75rem;
+  margin: 0.75rem 0;
+}
+
+.proof-content .latex-itemize {
+  list-style: disc;
+  padding-left: 1.75rem;
+  margin: 0.5rem 0;
+}
+
+.proof-content li {
+  margin-bottom: 0.35rem;
+}
